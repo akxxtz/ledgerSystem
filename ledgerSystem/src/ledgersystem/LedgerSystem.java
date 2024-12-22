@@ -1,20 +1,91 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package ledgersystem;
 
-/**
- *
- * @author weili
- */
-public class LedgerSystem {
+import java.util.Scanner;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+
+ class user{
+        double loan = 0.0;
+        
+        public void applyloan(double principal, double rate, int period){
+            loan+= principal +(principal*rate*period / 100);
+        }
+        
+       
+        public void repayloan(double amount){
+            if (loan>= amount){
+                loan-=amount;
+                System.out.println("Loan repaid successfully.");
+            }else{
+                System.out.println("amount exceeded outstanding loan");
+            }
+        }
+        
+         public double getloan(){
+            return loan;
+        }
     }
+
+public class LedgerSystem {
+    
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final user newuser = new user();
+    
+    private static void creditloan(){
+        System.out.println("Choose application:");
+        System.out.println("1.Apply Loan");
+        System.out.println("2.Repay Loan");
+        System.out.print(">");
+        int choice = scanner.nextInt();
+        
+        switch (choice){
+            case 1:
+                applyloan();
+                break;
+            case 2:
+                repayloan();
+                break;
+            default:
+                System.out.println("Invalid input");
+        }
+           
+    }
+
+    private static void applyloan(){
+        System.out.print("Enter Principal:");
+        double principal = scanner.nextDouble();
+        
+        System.out.print("Enter Interest Rate:");
+        double rate = scanner.nextDouble();
+        
+        System.out.print("Repayment Period(month):");
+        int period = scanner.nextInt();
+        
+        double repayment_amount = principal +(principal*rate*period / 100);
+        System.out.println("Total Repayment amount = "+repayment_amount);
+                                                                                          // start here = Schedule periodic or monthly installment 
+        newuser.applyloan(principal, rate, period);
+        
+        System.out.println("loan="+newuser.getloan());
+    }
+    
+    private static void repayloan(){
+        System.out.println("Enter amount");
+        double amount = scanner.nextDouble();
+        
+        newuser.repayloan(amount);
+        System.out.println("loan ="+newuser.getloan());
+        
+        
+    }
+   
+    
+
+    public static void main(String[] args) {
+        while(true){
+       creditloan();
+        }
+    }
+    
+    
     
 }
