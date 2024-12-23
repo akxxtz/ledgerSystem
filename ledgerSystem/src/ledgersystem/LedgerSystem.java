@@ -7,6 +7,8 @@ import java.util.Scanner;
        
         
         String name, email, password;
+        boolean debt = false;
+        double balance = 0.0;
         
          User() {
         this.name = "";
@@ -41,6 +43,24 @@ import java.util.Scanner;
          public double getloan(){
             return loan;
         }
+         
+         public void debit(double amount){
+             if (amount >0){
+                    balance +=amount;
+                    System.out.println("debit successfully");
+                }else{
+                 System.out.println("Enter positive value only:");
+             }
+         }
+         
+         public void credit(double amount){
+             if ((amount >0)&&(balance>amount)){
+                    balance -=amount;
+                    System.out.println("credit successfully");
+                }else{
+                 System.out.println("Enter positive value or not enough balance:");
+             }
+         }
     }
 
 public class LedgerSystem {
@@ -48,12 +68,12 @@ public class LedgerSystem {
     private static final Scanner scanner = new Scanner(System.in);
     private static final User newuser = new User();
     
-    private static User[] users = new User[50];
+    /*private static User[] users = new User[50];                             different user
     private static int userCount = 0;
     
     private static void addUser(User user) {
         users[userCount++] = user;
-    }
+    }*/                                                    
     
     private static void creditloan(){
         System.out.println("Choose application:");
@@ -106,8 +126,39 @@ public class LedgerSystem {
     
 
     public static void main(String[] args) {
+        
+        
         while(true){
-       creditloan();
+            System.out.println("1.debit:");
+            System.out.println("2.credit:");
+            System.out.println("else.manageloan:");
+            System.out.print("Enter choice:");
+            int choice = scanner.nextInt();
+            
+            if(choice ==1){
+                if(!(newuser.debt)){
+                System.out.println("Enter amount");
+                double amount = scanner.nextDouble();
+                newuser.debit(amount);
+                
+                }else{
+                    System.out.println("You have Unpaid loan.");
+                }
+            
+                
+            }else if(choice ==2){
+                 if(!(newuser.debt)){
+                System.out.println("Enter amount");
+                double amount = scanner.nextDouble();
+                newuser.credit(amount);
+                
+                }else{
+                    System.out.println("You have Unpaid loan.");
+                }
+            
+            }else{
+                creditloan();
+            }
         }
     }
     
