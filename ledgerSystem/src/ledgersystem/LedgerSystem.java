@@ -1,14 +1,17 @@
 package ledgersystem;
 
 import java.util.Scanner;
-
+import java.time.LocalDateTime;
 
  class User{
        
         
-        String name, email, password;
+        private String name;
+        private String email;
+        private String password;
         boolean debt = false;
         double balance = 0.0;
+        LocalDateTime date ;
         
          User() {
         this.name = "";
@@ -61,12 +64,14 @@ import java.util.Scanner;
                  System.out.println("Enter positive value or not enough balance:");
              }
          }
-    }
+ }
+         
+       
 
 public class LedgerSystem {
     
     private static final Scanner scanner = new Scanner(System.in);
-    private static final User newuser = new User();
+    private static final User user = new User();
     
     /*private static User[] users = new User[50];                             different user
     private static int userCount = 0;
@@ -108,20 +113,24 @@ public class LedgerSystem {
         double repayment_amount = principal +(principal*rate*period / 100);
         System.out.println("Total Repayment amount = "+repayment_amount);
                                                                                           // start here = Schedule periodic or monthly installment 
-        newuser.applyloan(principal, rate, period);
+        user.applyloan(principal, rate, period);
         
-        System.out.println("loan="+newuser.getloan());
+        LocalDateTime date = LocalDateTime.now().plusMonths(period);
+        user.date =date;
+        
+        System.out.println("loan="+user.getloan());
     }
     
     private static void repayloan(){
         System.out.println("Enter amount");
         double amount = scanner.nextDouble();
         
-        newuser.repayloan(amount);
-        System.out.println("loan ="+newuser.getloan());
+        user.repayloan(amount);
+        System.out.println("loan ="+user.getloan());
         
         
     }
+    
    
     
 
@@ -135,11 +144,16 @@ public class LedgerSystem {
             System.out.print("Enter choice:");
             int choice = scanner.nextInt();
             
+            LocalDateTime current = LocalDateTime.now();
+            if (user.date!=null && current.isAfter(user.date) && user.loan!=0){
+                user.debt=true;
+            }
+            
             if(choice ==1){
-                if(!(newuser.debt)){
+                if(!(user.debt)){
                 System.out.println("Enter amount");
                 double amount = scanner.nextDouble();
-                newuser.debit(amount);
+                user.debit(amount);
                 
                 }else{
                     System.out.println("You have Unpaid loan.");
@@ -147,10 +161,10 @@ public class LedgerSystem {
             
                 
             }else if(choice ==2){
-                 if(!(newuser.debt)){
+                 if(!(user.debt)){
                 System.out.println("Enter amount");
                 double amount = scanner.nextDouble();
-                newuser.credit(amount);
+                user.credit(amount);
                 
                 }else{
                     System.out.println("You have Unpaid loan.");
@@ -165,3 +179,4 @@ public class LedgerSystem {
     
     
 }
+ 
