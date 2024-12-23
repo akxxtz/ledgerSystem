@@ -116,6 +116,7 @@ public class LedgerSystem {
         user.applyloan(principal, rate, period);
         
         LocalDateTime date = LocalDateTime.now().plusMonths(period);
+        System.out.println("please pay the loan within the given time "+date);
         user.date =date;
         
         System.out.println("loan="+user.getloan());
