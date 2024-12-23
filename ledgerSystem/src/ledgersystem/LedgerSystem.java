@@ -9,17 +9,17 @@ import java.time.LocalDateTime;
         private String name;
         private String email;
         private String password;
-        boolean debt = false;
-        double balance = 0.0;
-        LocalDateTime date ;
+        boolean debt = false;                                                                      // change this to private and return boolean value
+        private double balance = 0.0;
+        private LocalDateTime duedate ;
         
-         User() {
+        public User() {
         this.name = "";
         this.email = "";
         this.password = "";
     }
     
-        User(String name, String email, String password) {
+        public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -31,6 +31,8 @@ import java.time.LocalDateTime;
         
         public void applyloan(double principal, double rate, int period){
             loan+= principal +(principal*rate*period / 100);
+            duedate = LocalDateTime.now().plusMonths(period);
+            System.out.println("please pay the loan within the time given:"+duedate);
         }
         
        
@@ -64,8 +66,14 @@ import java.time.LocalDateTime;
                  System.out.println("Enter positive value or not enough balance:");
              }
          }
- }
          
+         
+         public void updatedebtstatus(){
+             if (duedate != null && LocalDateTime.now().isAfter(duedate) && loan != 0) {
+             debt = true;
+         }
+    }
+ }    
        
 
 public class LedgerSystem {
@@ -104,7 +112,7 @@ public class LedgerSystem {
         System.out.print("Enter Principal:");
         double principal = scanner.nextDouble();
         
-        System.out.print("Enter Interest Rate:");
+        System.out.print("Enter Interest Rate per month:");
         double rate = scanner.nextDouble();
         
         System.out.print("Repayment Period(month):");
@@ -114,10 +122,6 @@ public class LedgerSystem {
         System.out.println("Total Repayment amount = "+repayment_amount);
                                                                                           // start here = Schedule periodic or monthly installment 
         user.applyloan(principal, rate, period);
-        
-        LocalDateTime date = LocalDateTime.now().plusMonths(period);
-        System.out.println("please pay the loan within the given time "+date);
-        user.date =date;
         
         System.out.println("loan="+user.getloan());
     }
@@ -141,38 +145,40 @@ public class LedgerSystem {
         while(true){
             System.out.println("1.debit:");
             System.out.println("2.credit:");
-            System.out.println("else.manageloan:");
+            System.out.println("3.manageloan:");
             System.out.print("Enter choice:");
             int choice = scanner.nextInt();
             
-            LocalDateTime current = LocalDateTime.now();
-            if (user.date!=null && current.isAfter(user.date) && user.loan!=0){
-                user.debt=true;
-            }
+           user.updatedebtstatus();
             
-            if(choice ==1){
-                if(!(user.debt)){
-                System.out.println("Enter amount");
-                double amount = scanner.nextDouble();
-                user.debit(amount);
+            switch (choice){
+                case 1:
+                    if(!(user.debt)){
+                    System.out.println("Enter amount");
+                    double amount = scanner.nextDouble();
+                    user.debit(amount);
                 
-                }else{
-                    System.out.println("You have Unpaid loan.");
-                }
-            
+                    }else{
+                        System.out.println("You have Unpaid loan.");
+                    }
+                    break;
                 
-            }else if(choice ==2){
-                 if(!(user.debt)){
-                System.out.println("Enter amount");
-                double amount = scanner.nextDouble();
-                user.credit(amount);
+                case 2:
+                    if(!(user.debt)){
+                   System.out.println("Enter amount");
+                   double amount = scanner.nextDouble();
+                   user.credit(amount);
+
+                   }else{
+                       System.out.println("You have Unpaid loan.");
+                   }
+                    break;
                 
-                }else{
-                    System.out.println("You have Unpaid loan.");
-                }
-            
-            }else{
-                creditloan();
+                case 3:
+                    creditloan();
+                    break;
+                default :
+                    System.out.println("Invalid input");
             }
         }
     }
