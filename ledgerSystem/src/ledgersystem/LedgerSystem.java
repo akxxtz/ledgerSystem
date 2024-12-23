@@ -3,8 +3,26 @@ package ledgersystem;
 import java.util.Scanner;
 
 
- class user{
+ class User{
+       
+        
+        String name, email, password;
+        
+         User() {
+        this.name = "";
+        this.email = "";
+        this.password = "";
+    }
+    
+        User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+         }
+         
+         
         double loan = 0.0;
+  
         
         public void applyloan(double principal, double rate, int period){
             loan+= principal +(principal*rate*period / 100);
@@ -28,7 +46,14 @@ import java.util.Scanner;
 public class LedgerSystem {
     
     private static final Scanner scanner = new Scanner(System.in);
-    private static final user newuser = new user();
+    private static final User newuser = new User();
+    
+    private static User[] users = new User[50];
+    private static int userCount = 0;
+    
+    private static void addUser(User user) {
+        users[userCount++] = user;
+    }
     
     private static void creditloan(){
         System.out.println("Choose application:");
