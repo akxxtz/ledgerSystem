@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
         private String name;
         private String email;
         private String password;
-        boolean debt = false;                                                                      // change this to private and return boolean value
+        private boolean debt = false;                                                                      // change this to private and return boolean value
         private double balance = 0.0;
         private LocalDateTime duedate ;
         
@@ -73,6 +73,9 @@ import java.time.LocalDateTime;
              debt = true;
          }
     }
+         public boolean hasdebt(){
+             return debt;
+         }
  }    
        
 
@@ -141,11 +144,13 @@ public class LedgerSystem {
 
     public static void main(String[] args) {
         
+        boolean run = true;
         
-        while(true){
+        while(run){
             System.out.println("1.debit:");
             System.out.println("2.credit:");
             System.out.println("3.manageloan:");
+            System.out.println("4.Exit:");
             System.out.print("Enter choice:");
             int choice = scanner.nextInt();
             
@@ -153,7 +158,7 @@ public class LedgerSystem {
             
             switch (choice){
                 case 1:
-                    if(!(user.debt)){
+                    if(!(user.hasdebt())){
                     System.out.println("Enter amount");
                     double amount = scanner.nextDouble();
                     user.debit(amount);
@@ -164,7 +169,7 @@ public class LedgerSystem {
                     break;
                 
                 case 2:
-                    if(!(user.debt)){
+                    if(!(user.hasdebt())){
                    System.out.println("Enter amount");
                    double amount = scanner.nextDouble();
                    user.credit(amount);
@@ -176,6 +181,9 @@ public class LedgerSystem {
                 
                 case 3:
                     creditloan();
+                    break;
+                case 4:
+                    run=false;
                     break;
                 default :
                     System.out.println("Invalid input");
