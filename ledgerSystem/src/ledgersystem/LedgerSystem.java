@@ -26,13 +26,13 @@ import java.time.LocalDateTime;
          }
          
          
-        double loan = 0.0;
+        private double loan = 0.0;
   
         
         public void applyloan(double principal, double rate, int period){
             loan+= principal +(principal*rate*period / 100);
             duedate = LocalDateTime.now().plusMonths(period);
-            System.out.println("please pay the loan within the time given:"+duedate);
+            System.out.println("please pay the loan within "+period+" months. Time : " +duedate);
         }
         
        
@@ -72,6 +72,8 @@ import java.time.LocalDateTime;
              if (duedate != null && LocalDateTime.now().isAfter(duedate) && loan != 0) {
              debt = true;
          }
+                   
+             
     }
          public boolean hasdebt(){
              return debt;
