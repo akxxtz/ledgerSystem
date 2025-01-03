@@ -1,51 +1,110 @@
-import java.time.LocalDateTime;
-// User class representing the core user entity
-public class User {
-    private int userId;
-    private String name;
-    private String email;
-    private String password;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastLogin;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package fop_final_ledger;
 
-    public User(int userId, String name, String email, String password) {
-        this.userId = userId;
+import java.time.LocalDateTime;
+
+/**
+ *
+ * @author weili
+ */
+class User{
+       
+        
+    
+        private int user_id;
+        private String name;
+        private String email;
+        private String password;
+                                                                           
+        private double balance = 0.0;
+        //loan
+        //private boolean debt = false;                //loan
+        private LocalDateTime duedate  ;             
+        private double loan = 0.0;
+        
+
+        
+        
+        
+        public User() {
+        this.user_id = 0;
+        this.name = "";
+        this.email = "";
+        this.password = "";
+    }
+    
+        public User(int user_id, String name, String email, String password) {
+        this.user_id = user_id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.createdAt = LocalDateTime.now();
-    }
+         }
 
-    // Getters and setters
-    public int getUserId() { return userId; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public LocalDateTime getLastLogin() { return lastLogin; }
-    public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
+         
+         
+       public void debit(double amount){
+           if (amount <= 0){
+                System.out.println("Enter positive value only:");
+                return;
+            }
 
-    // Convert user to CSV format
-    public String toCsvString() {
-        return String.format("%d,%s,%s,%s,%s,%s",
-                userId, name, email, password,
-                createdAt.toString(),
-                lastLogin != null ? lastLogin.toString() : ""
-        );
-    }
+             balance +=amount;
+             
+   
+       }
+       
+       public void debitForSaving(double amount, Saving saving){
+           if (amount <= 0){
+                System.out.println("Enter positive value only:");
+                return;
+            }
 
-    // Create user from CSV line
-    public static User fromCsvString(String line) {
-        String[] parts = line.split(",");
-        User user = new User(
-                Integer.parseInt(parts[0]),
-                parts[1],
-                parts[2],
-                parts[3]
-        );
-        user.createdAt = LocalDateTime.parse(parts[4]);
-        if (parts.length > 5 && !parts[5].isEmpty()) {
-            user.lastLogin = LocalDateTime.parse(parts[5]);
+             balance +=amount*(1-(saving.getpercentage()/100));
+             
+   
+       }
+       
+         public void credit(double amount){
+             if ((amount >0)&&(balance>amount)){
+                    balance -=amount;
+                    System.out.println("credit successfully");
+                }else{
+                 System.out.println("Enter positive value or not enough balance:");
+             }
+         }
+         
+          public void TransferSavingToBalance(Saving saving){
+          balance += saving.getamountToCredit();
+          saving.set_amountToCreditToZero();
         }
-        return user;
-    }
-}
+         
+         
+
+         
+         public int getuserid(){
+             return user_id;
+         }
+         public String getname(){
+             return name;
+         }
+         
+         public String getemail(){
+             return email;
+         }
+         
+         public String getpassword(){
+             return password;
+         }
+        
+         public double getbalance(){
+             return balance;
+         }
+         
+
+         
+
+ }    
+       
